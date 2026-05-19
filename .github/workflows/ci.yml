@@ -1,4 +1,4 @@
-name: Python CI Pipeline
+name: Python CI/CD Pipeline
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  test:
+  build-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,5 +24,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Run linting
+        run: flake8 .
+
       - name: Run tests
         run: pytest
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-app
+          path: .
